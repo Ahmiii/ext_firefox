@@ -18,8 +18,7 @@
     "storage",
     "cookies",
     "management",
-    "notifications",
-    "webRequestBlocking"
+    "notifications"
   ],
   "host_permissions": ["<all_urls>"],
   "icons": {
@@ -28,7 +27,7 @@
     "128": "icon.png"
   },
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {

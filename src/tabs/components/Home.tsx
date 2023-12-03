@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Dashboard from "../../Layouts/Dashboard";
 function Home() {
-  chrome
+  chrome;
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const boolData = useMemo(
@@ -9,48 +9,40 @@ function Home() {
     [checked]
   );
 
-  // useEffect(() => {
-  //   // console.log({ boolData });
-  //   // boolData == "Connected" ? setChecked(true) : setChecked(false);
-  //   chrome.proxy.settings.get({ incognito: false }, (config) => {
-  //     if (config.levelOfControl === "controlled_by_this_extension") {
-  //       if (config.value && config.value.mode === "pac_script") {
-  //         setChecked(true);
-  //       }
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    chrome.proxy.settings.get({ incognito: false }, (config) => {
+      if (config.levelOfControl === "controlled_by_this_extension") {
+        if (config.value && config.value.mode === "pac_script") {
+          setChecked(true);
+        }
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (checked) {
-      chrome.runtime.sendMessage("firefox", (res) => {
-        console.log({ res });
-        if (res?.status == 200) {
-          localStorage.setItem("proxied", JSON.stringify(res?.message));
-          setChecked(true);
+      const pacScript = `function FindProxyForURL(url, host) {
+        if (isPlainHostName(host)) {
+          return 'DIRECT';
+        }
+        return 'HTTPS px012702.pointtoserver.com:10798';
+      }`;
+
+      const config = {
+        mode: "pac_script",
+        pacScript: {
+          data: pacScript,
+        },
+      };
+      chrome.proxy.settings.set({ value: config }, () => {
+        
+        if (chrome.runtime.lastError) {
+          console.error("Error setting proxy:", chrome.runtime.lastError);
+        } else {
+          console.log("Proxy set successfully");
+          setLoading(false);
         }
       });
-      //   const pacScript = `function FindProxyForURL(url, host) {
-      //   if (isPlainHostName(host)) {
-      //     return 'DIRECT';
-      //   }
-      //   return 'PROXY px012702.pointtoserver.com:10780';
-      // }`;
-
-      //   const config = {
-      //     mode: "pac_script",
-      //     pacScript: {
-      //       data: pacScript,
-      //     },
-      //   };
-      //   chrome.proxy.settings.set({ value: config}, () => {
-      //     if (chrome.runtime.lastError) {
-      //       console.error("Error setting proxy:", chrome.runtime.lastError);
-      //     } else {
-      //       console.log("Proxy set successfully");
-      //       setLoading(false);
-      //     }
-      
     }
   }, [checked]);
 
