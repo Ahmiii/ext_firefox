@@ -14,13 +14,14 @@
     "privacy",
     "webRequest",
     "webNavigation",
+    "webRequestAuthProvider",
     "proxy",
     "storage",
     "cookies",
     "management",
     "notifications"
   ],
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": ["http://*/*", "https://*/*"],
   "icons": {
     "16": "icon.png",
     "48": "icon.png",
