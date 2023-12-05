@@ -33,8 +33,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["contentScript.js"]
+      "matches": ["<all_urls>"]
     }
   ]
 }

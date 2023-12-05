@@ -1,30 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Dashboard from '../../Layouts/Dashboard';
-import Browser from 'webextension-polyfill';
-function Home() {
-  chrome;
+import DashboardLayout from '../../Layouts/Dashboard';
+
+const Dashboard = () => {
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    chrome.proxy.settings.get({}, (config) => {
-      console.log({ config });
-      if (config.levelOfControl === 'controlled_by_this_extension') {
-        if (
-          (config.value && config.value.mode === 'pac_script') ||
-          config.value.ssl.length > 0
-        ) {
-          setChecked(true);
-        }
-      }
-    });
-  }, []);
-
-  useEffect(() => {
     if (checked) {
-      chrome.runtime.sendMessage('connection',(res=>{
-        console.log({res})
-      }))
+      chrome.runtime.sendMessage('Connection', (res) => {
+        console.log({ res });
+      });
       // let config = {
       //   proxyType: 'manual',
       //   ssl: 'px012702.pointtoserver.com:10798',
@@ -62,7 +47,7 @@ function Home() {
   };
 
   return (
-    <Dashboard>
+    <DashboardLayout>
       <div className='h-full grid grid-rows-3'>
         <div className='grid-cols-1'>
           <div className='flex flex-row justify-between'>
@@ -104,8 +89,8 @@ function Home() {
         </label>
         <div className='grid-cols-1'>3</div>
       </div>
-    </Dashboard>
+    </DashboardLayout>
   );
-}
+};
 
-export default Home;
+export default Dashboard;
