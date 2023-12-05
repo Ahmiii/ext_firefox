@@ -6,31 +6,24 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    chrome.runtime.sendMessage('getConnection', (res) => {
+      if (res) {
+        setChecked(true);
+      } else {
+        setChecked(false);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     if (checked) {
-      chrome.runtime.sendMessage('Connection', (res) => {
-        console.log({ res });
-      });
-      // let config = {
-      //   proxyType: 'manual',
-      //   ssl: 'px012702.pointtoserver.com:10798',
-      //   socksVersion: 4,
-      //   httpProxyAll: true,
-      // };
-      // chrome.proxy.settings.set({ value: config }, () => {
-      //   if (chrome.runtime.lastError) {
-      //     console.error('Error setting proxy:', chrome.runtime.lastError);
-      //   } else {
-      //     console.log('Proxy set successfully');
-      //     chrome.privacy.network.webRTCIPHandlingPolicy.set({
-      //       value: 'disable_non_proxied_udp',
-      //       scope: 'regular',
-      //     });
-      //     setLoading(false);
-      //   }
-      // });
-    } else {
-      chrome.proxy.settings.clear({}, () => {
-        setLoading(false);
+      chrome.runtime.sendMessage('setConnection', (res) => {
+        console.log(res?.data);
+        if (res?.data == true) {
+          setLoading(false);
+        } else {
+          setChecked(false);
+        }
       });
     }
   }, [checked]);
@@ -42,7 +35,10 @@ const Dashboard = () => {
         setChecked(true);
       }, 2000);
     } else {
-      setChecked(false);
+      chrome.proxy.settings.clear({}, () => {
+        setLoading(false);
+        setChecked(false);
+      });
     }
   };
 

@@ -23,16 +23,23 @@ export class Connection {
     });
   }
   getConnectionStatus() {
-    chrome.proxy.settings.get({}, (config) => {
-      console.log({ config });
-      if (config.levelOfControl === 'controlled_by_this_extension') {
-        if (
-          (config.value && config.value.mode === 'pac_script') ||
-          config.value.ssl.length > 0
-        ) {
-          return true;
+    return new Promise((resolve, reject) => {
+      chrome.proxy.settings.get({}, (config) => {
+        if (config.levelOfControl === 'controlled_by_this_extension') {
+          console.log({ config });
+          if (
+            (config.value && config.value.mode === 'pac_script') ||
+            config.value.ssl.length > 0
+          ) {
+            resolve(true);
+          } else {
+            console.log('yaha aega bhai');
+            reject(false);
+          }
+        } else {
+          reject(false);
         }
-      }
+      });
     });
   }
 }

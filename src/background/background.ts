@@ -3,12 +3,25 @@ import { Content } from '../Modules';
 let content = new Content();
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message == 'Connection') {
+  if (message == 'setConnection') {
     content
       .getConnectionModule()
       .createConnection()
       .then((res) => {
         sendResponse({ data: res });
+      });
+    return true;
+  }
+  if (message == 'getConnection') {
+    console.log('yaha aya');
+    content
+      .getConnectionModule()
+      .getConnectionStatus()
+      .then((res) => {
+        sendResponse({ data: res });
+      })
+      .catch((error) => {
+        sendResponse(error);
       });
     return true;
   }
