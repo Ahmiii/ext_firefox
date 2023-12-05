@@ -36,7 +36,7 @@ const Dashboard = () => {
       }, 2000);
     } else {
       chrome.proxy.settings.clear({}, () => {
-        setLoading(false);
+        setLoading(false)
         setChecked(false);
       });
     }

@@ -1,22 +1,21 @@
-// chrome.runtime.sendMessage('I am loading content script', (response) => {
-//     console.log(response);
-//     console.log('I am content script')
-
-// })
-
-// window.onload = (event) => {
-//     console.log('page is fully loaded');
-// };
 import { Connection } from './Connection';
+import { Authentication } from './Authentication';
 
 class Content {
   private connectionModule: Connection;
+  private authenticationModule: Authentication;
+
   constructor() {
     this.connectionModule = new Connection();
+    this.authenticationModule = new Authentication();
   }
 
   getConnectionModule(): Connection {
     return this.connectionModule;
+  }
+
+  getAuthenticationModule(): Authentication {
+    return this.authenticationModule;
   }
 }
 export { Content };
