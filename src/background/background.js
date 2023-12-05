@@ -1,29 +1,22 @@
 import { getUserAuth, bgResponse } from '../assets/utils/common';
 
-// chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-//   if (msg == "firefox") {
-//     // function handleProxyRequest(requestInfo) {
-//     //   console.log(`Proxying: ${requestInfo.url}`);
-//     //   return { type: "PROXY", host: "px012702.pointtoserver.com", port: 10780 };
-//     // }
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message == 'connection') {
+    let proxySettings = {
+      proxyType: 'manual',
+      http: 'px012702.pointtoserver.com:10780',
+      socksVersion: 4,
+      httpProxyAll: true,
+    };
 
-//     // browser.proxy.onRequest.addListener(handleProxyRequest, {
-//     //   urls: ["<all_urls>"],
-//     // });
-//     // sendResponse(bgResponse(200, "Connected"));
-//     // return true;
-//     let proxySettings = {
-//       proxyType: "manual",
-//       ssl: "px012702.pointtoserver.com:10798",
-//       socksVersion: 4,
-//       httpProxyAll:true,
-//     };
-
-//     browser.proxy.settings.set({ value: proxySettings });
-//     sendResponse(bgResponse(200, "Connected"));
-//     return true;
-//   }
-// });
+    browser.proxy.settings.set({ value: proxySettings });
+    chrome.privacy.network.webRTCIPHandlingPolicy.set({
+      value: 'disable_non_proxied_udp',
+    });
+  }
+});
+{
+}
 
 chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo, tab) {
   if (tabId === tab.id && changeInfo.status === 'complete') {
@@ -49,9 +42,7 @@ chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo, tab) {
     }
   }
 });
-chrome.privacy.network.webRTCIPHandlingPolicy.set({
-  value: 'default_public_interface_only',
-});
+
 chrome.webRequest.onAuthRequired.addListener(
   function (details) {
     return getUserAuth();
@@ -61,3 +52,5 @@ chrome.webRequest.onAuthRequired.addListener(
   },
   ['blocking']
 );
+
+b

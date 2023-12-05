@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Dashboard from '../../Layouts/Dashboard';
+import Browser from 'webextension-polyfill';
 function Home() {
   chrome;
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
-  const boolData = useMemo(
-    () => JSON.parse(localStorage.getItem('proxied')),
-    [checked]
-  );
 
   useEffect(() => {
-    chrome.proxy.settings.get({ incognito: false }, (config) => {
+    chrome.proxy.settings.get({}, (config) => {
+      console.log({ config });
       if (config.levelOfControl === 'controlled_by_this_extension') {
-        if (config.value && config.value.mode === 'pac_script') {
+        if (
+          (config.value && config.value.mode === 'pac_script') ||
+          config.value.ssl.length > 0
+        ) {
           setChecked(true);
         }
       }
@@ -21,32 +22,27 @@ function Home() {
 
   useEffect(() => {
     if (checked) {
-      console.log( chrome.extension.inIncognitoContext)
-      const pacScript = `function FindProxyForURL(url, host) {
-        if (isPlainHostName(host)) {
-          return 'DIRECT';
-        }
-        return 'HTTPS px012702.pointtoserver.com:10798';
-      }`;
-
-      const config = {
-        mode: 'pac_script',
-        pacScript: {
-          data: pacScript,
-        },
-      };
-      chrome.proxy.settings.set({ value: config }, () => {
-        if (chrome.runtime.lastError) {
-          console.error('Error setting proxy:', chrome.runtime.lastError);
-        } else {
-          console.log('Proxy set successfully');
-          chrome.privacy.network.webRTCIPHandlingPolicy.set({
-            value: 'disable_non_proxied_udp',
-            scope: 'regular',
-          });
-          setLoading(false);
-        }
+      chrome.runtime.sendMessage('connection').then((res) => {
+        console.log({ res });
       });
+      // let config = {
+      //   proxyType: 'manual',
+      //   ssl: 'px012702.pointtoserver.com:10798',
+      //   socksVersion: 4,
+      //   httpProxyAll: true,
+      // };
+      // chrome.proxy.settings.set({ value: config }, () => {
+      //   if (chrome.runtime.lastError) {
+      //     console.error('Error setting proxy:', chrome.runtime.lastError);
+      //   } else {
+      //     console.log('Proxy set successfully');
+      //     chrome.privacy.network.webRTCIPHandlingPolicy.set({
+      //       value: 'disable_non_proxied_udp',
+      //       scope: 'regular',
+      //     });
+      //     setLoading(false);
+      //   }
+      // });
     } else {
       chrome.proxy.settings.clear({}, () => {
         setLoading(false);
