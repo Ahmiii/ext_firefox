@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import DashboardLayout from '../../Layouts/Dashboard';
-
+const browserType =
+  navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+    ? 'firefox'
+    : 'chrome';
 const Dashboard = () => {
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     chrome.runtime.sendMessage('getConnection', (res) => {
-      if (res) {
+      if (res == true) {
         setChecked(true);
       } else {
         setChecked(false);
@@ -17,12 +20,21 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (checked) {
-      chrome.runtime.sendMessage('setConnection', (res) => {
-        console.log(res?.data);
-        if (res?.data == true) {
-          setLoading(false);
-        } else {
-          setChecked(false);
+      chrome.runtime.sendMessage('getConnection', (res) => {
+        if (!res) {
+          console.log('yaaha ae ho')
+          chrome.runtime.sendMessage(
+            { messageType: 'setConnection', browserType: browserType },
+            (res) => {
+              console.log({ res });
+              setLoading(false);
+              if (res == true) {
+                setChecked(true);
+              } else {
+                setChecked(false);
+              }
+            }
+          );
         }
       });
     }
@@ -36,7 +48,7 @@ const Dashboard = () => {
       }, 2000);
     } else {
       chrome.proxy.settings.clear({}, () => {
-        setLoading(false)
+        setLoading(false);
         setChecked(false);
       });
     }

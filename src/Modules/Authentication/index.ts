@@ -66,20 +66,10 @@ export class Authentication {
                           chrome.tabs.remove(tabId);
                           resolve(res);
                         });
-                        // chrome.storage.local.set({ userData }, () => {
-                        //   chrome.tabs.remove(tabId);
-                        //   console.log('User data saved to local storage');
-                        // });
-                        // chrome.storage.local
-                        //   .set({ key: 'userData', value: userData })
-                        //   .then((res) => {
-                        //     resolve(res);
-                        //   });
                       }
                     }
                   }
                 );
-                // chrome.tabs.onUpdated.removeListener(listener);
               }
             }
           });

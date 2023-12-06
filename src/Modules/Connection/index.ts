@@ -1,24 +1,55 @@
 export class Connection {
   private browser: any;
   constructor() {
-    this.browser = (window as any).browser;
+    if (typeof window !== 'undefined') {
+      //This code is executed in the browser
+      this.browser = (window as any).browser;
+    }
   }
 
-  createConnection() {
+  createConnection(browserType: string) {
     return new Promise(async (resolve, reject) => {
-      let proxySettings = {
-        proxyType: 'manual',
-        http: 'px012702.pointtoserver.com:10780',
-        socksVersion: 4,
-        httpProxyAll: true,
-      };
-      let status = await this.browser.proxy.settings.set({
-        value: proxySettings,
-      });
-      if (status == true) {
-        resolve(true);
+      if (browserType == 'firefox') {
+        let proxySettings = {
+          proxyType: 'manual',
+          http: 'px012702.pointtoserver.com:10780',
+          socksVersion: 4,
+          httpProxyAll: true,
+        };
+        let status = await this.browser.proxy.settings.set({
+          value: proxySettings,
+        });
+        if (status == true) {
+          resolve(true);
+        } else {
+          reject(false);
+        }
       } else {
-        reject(false);
+        const pacScript = `function FindProxyForURL(url, host) {
+          if (isPlainHostName(host)) {
+            return 'DIRECT';
+          }
+          return 'HTTPS px012702.pointtoserver.com:10798';
+        }`;
+
+        const config = {
+          mode: 'pac_script',
+          pacScript: {
+            data: pacScript,
+          },
+        };
+        chrome.proxy.settings.set(
+          {
+            value: config,
+          },
+          () => {
+            if (chrome.runtime.lastError) {
+              reject(false);
+            } else {
+              resolve(true);
+            }
+          }
+        );
       }
     });
   }

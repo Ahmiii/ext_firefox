@@ -2,12 +2,13 @@ import { getUserAuth, bgResponse } from '../utils/common';
 import { Content } from '../Modules';
 let content = new Content();
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message == 'setConnection') {
+  const { messageType, browserType } = message;
+  if (messageType == 'setConnection') {
     content
       .getConnectionModule()
-      .createConnection()
+      .createConnection(browserType)
       .then((res) => {
-        sendResponse({ data: res });
+        sendResponse(res);
       })
       .catch((error) => {
         sendResponse(error);
@@ -19,7 +20,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       .getConnectionModule()
       .getConnectionStatus()
       .then((res) => {
-        sendResponse({ data: res });
+        sendResponse(res);
       })
       .catch((error) => {
         sendResponse(error);
