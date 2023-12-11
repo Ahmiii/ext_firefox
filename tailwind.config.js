@@ -11,12 +11,19 @@ module.exports = {
       '5xl': '3.052rem',
     },
     colors: {
-      white: '',
-      black: '',
-      red: '',
-      green: '',
+      white: {
+        100: '#FFFFFF',
+        30: '#F9F7FC',
+      },
+      black: '#111618',
+      // red: '',
+      // green: '',
     },
-    extend: {},
+    extend: {
+      backgroundImage: {
+        hero_pattern: "url('/src/assets/map.svg)",
+      },
+    },
   },
   plugins: [],
 };

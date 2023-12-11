@@ -60,8 +60,8 @@ const Dashboard = () => {
         <div className='grid-cols-1'>
           <div className='flex flex-row justify-between'>
             <div className='flex flex-col'>
-              <p className='text-black text-2xl dark:text-white'>heading</p>
-              <p className='text-black text-xl dark:text-white'>description</p>
+              <p className='text-black text-2xl dark:text-white-100'>heading</p>
+              <p className='text-black text-xl dark:text-white-100'>description</p>
             </div>
             <div>image</div>
           </div>
