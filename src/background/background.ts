@@ -56,3 +56,11 @@ chrome.webRequest.onAuthRequired.addListener(
   },
   ['blocking']
 );
+chrome.runtime.setUninstallURL('https://google.com', () => {
+  chrome.proxy.settings.set({
+    value: {
+      mode: 'direct',
+    },
+    scope: 'regular',
+  });
+});

@@ -31,6 +31,7 @@ export class Authentication {
   }
 
   getUserLoggedIn() {
+    console.log('yata ak aya')
     const setUserAuth = this.setUserAuth;
     return new Promise((resolve, reject) => {
       chrome.windows.create(

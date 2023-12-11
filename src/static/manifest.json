@@ -14,7 +14,7 @@
     "privacy",
     "webRequest",
     "webNavigation",
-    "webRequestBlocking",
+    "webRequestAuthProvider",
     "proxy",
     "storage",
     "cookies",
@@ -29,6 +29,6 @@
     "128": "icon.png"
   },
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background.js"
 }
 }

@@ -13,7 +13,7 @@ export default (props) => {
     navigate("/dashboard");
   };
   return (
-    <div className="h-screen container p-4 dashboardImg">
+    <div className="h-screen container p-4 bg-white dark:bg-black">
       <div className="h-full flex flex-col justify-between">
         <div className="h-full">{props.children}</div>
         <div className="grid grid-cols-3">

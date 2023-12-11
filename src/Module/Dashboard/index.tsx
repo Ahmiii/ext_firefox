@@ -22,7 +22,7 @@ const Dashboard = () => {
     if (checked) {
       chrome.runtime.sendMessage('getConnection', (res) => {
         if (!res) {
-          console.log('yaaha ae ho')
+          console.log('yaaha ae ho');
           chrome.runtime.sendMessage(
             { messageType: 'setConnection', browserType: browserType },
             (res) => {
@@ -60,8 +60,8 @@ const Dashboard = () => {
         <div className='grid-cols-1'>
           <div className='flex flex-row justify-between'>
             <div className='flex flex-col'>
-              <p className='text-white text-2xl'>heading</p>
-              <p className='text-white text-xl'>description</p>
+              <p className='text-black text-2xl dark:text-white'>heading</p>
+              <p className='text-black text-xl dark:text-white'>description</p>
             </div>
             <div>image</div>
           </div>

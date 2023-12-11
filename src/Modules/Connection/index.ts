@@ -59,12 +59,11 @@ export class Connection {
         if (config.levelOfControl === 'controlled_by_this_extension') {
           console.log({ config });
           if (
-            (config.value && config.value.mode === 'pac_script') ||
-            config.value.ssl.length > 0
+            (config?.value && config?.value.mode === 'pac_script') ||
+            config?.value?.ssl?.length > 0
           ) {
             resolve(true);
           } else {
-            console.log('yaha aega bhai');
             reject(false);
           }
         } else {
