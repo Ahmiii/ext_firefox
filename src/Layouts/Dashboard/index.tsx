@@ -5,17 +5,21 @@ export default (props) => {
   const navigate = useNavigate();
 
   console.log('location', { location });
-  const goToProxy = () => {
+
+  const onClickCountryTab = () => {
+    navigate('/countries');
+  };
+  const onClickHomeTab = () => {
     navigate('/dashboard');
   };
-  const goTohome = () => {
-    navigate('/about');
+  const onClickSettingsTab = () => {
+    navigate('/settings');
   };
 
   const tabList = [
     {
-      onClick: goToProxy,
-      path: '/dashboard',
+      onClick: onClickCountryTab,
+      path: '/countries',
       text: 'Countries',
       svgPath: (
         <path
@@ -26,8 +30,8 @@ export default (props) => {
       ),
     },
     {
-      onClick: goTohome,
-      path: '/about',
+      onClick: onClickHomeTab,
+      path: '/dashboard',
       text: 'Home',
       svgPath: (
         <path
@@ -38,7 +42,7 @@ export default (props) => {
       ),
     },
     {
-      onClick: () => {},
+      onClick: onClickSettingsTab,
       path: '/settings',
       text: 'Settings',
       svgPath: (

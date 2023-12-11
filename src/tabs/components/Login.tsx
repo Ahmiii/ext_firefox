@@ -8,11 +8,6 @@ const Login = () => {
       if (res?.userData) {
         navigate('/dashboard');
       }
-      // else {
-      //   chrome.runtime.sendMessage('LogIn', (res) => {
-      //     console.log({ res });
-      //   });
-      // }
     });
   }, []);
 

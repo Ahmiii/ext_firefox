@@ -20,7 +20,7 @@ const Tab = ({ onClick, tabPath, tabText, svgPath }) => {
       </p>
       {tabPath === location.pathname && (
         <div className='relative w-24'>
-          <div className='absolute inset-x-0 bottom-[-16px] h-1 bg-red'></div>
+          <div className='absolute inset-x-0 bottom-[-16px] h-1 rounded-t-lg bg-red'></div>
         </div>
       )}
     </button>

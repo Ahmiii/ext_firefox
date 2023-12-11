@@ -19,8 +19,9 @@ const Root = () => {
       {/* <Pop /> */}
       <Routes>
         <Route path='/' element={<Login />} />
+        <Route path='/countries' element={<About />} />
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/about' element={<About />} />
+        <Route path='/settings' element={<About />} />
       </Routes>
     </Router>
   );
