@@ -26,6 +26,9 @@ module.exports = {
       },
     },
     extend: {
+      spacing: {
+        26: '6.5rem',
+      },
       backgroundImage: {
         hero_pattern: "url('/src/assets/map.svg)",
       },

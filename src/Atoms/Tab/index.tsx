@@ -10,12 +10,14 @@ const Tab = ({ onClick, tabPath, tabText, svgPath }) => {
       <svg
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 20 20'
-        className={`w-5 h-5 ${location?.pathname == tabPath && 'fill-red'}`}
+        className={`w-5 h-5 ${
+          location?.pathname == tabPath ? 'fill-red' : 'fill-gray-500'
+        }`}
       >
         {svgPath}
       </svg>
 
-      <p className={tabPath === location.pathname ? 'text-red' : ''}>
+      <p className={tabPath === location.pathname ? 'text-red' : 'text-gray-500'}>
         {tabText}
       </p>
       {tabPath === location.pathname && (

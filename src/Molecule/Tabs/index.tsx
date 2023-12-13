@@ -4,7 +4,7 @@ import Tab from '../../Atoms/Tab';
 const Tabs = ({ tabs }) => {
 
   return (
-    <div className={`grid grid-cols-${tabs.length}`}>
+    <div className={`grid grid-cols-3 gap-4`}>
       {tabs.map((tab, index) => (
         <Tab
           key={index}
