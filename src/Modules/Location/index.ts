@@ -1,9 +1,12 @@
+import { Storage } from '../Storage';
 export class Location {
+  private storage = new Storage();
   constructor() {}
-  setFavourites(key, value) {
+
+  setFavourites(value) {
     return new Promise((resolve, reject) => {
-      chrome.storage.local
-        .set({ [key]: value })
+      this.storage
+        .setLocalStorageData('favourites', value)
         .then((result) => {
           resolve(result);
         })
@@ -14,8 +17,8 @@ export class Location {
   }
   getFavourites() {
     return new Promise((resolve, reject) => {
-      chrome.storage.local
-        .get(['favourites'])
+      this.storage
+        .getLocalStorageData('favourites')
         .then((result) => {
           resolve(result);
         })

@@ -8,14 +8,15 @@ let content = new Content();
 const Location = () => {
   const [countryList, setCountryList] = useState([]);
   const [favourites, setFavourites] = useState({});
+
   const onMakeFavourite = (e) => {
     let allFavourites = {
       ...favourites,
-      [e.target.id]: true,
+      [e.target.id]: favourites[e.target.id] ? false : true,
     };
     content
       .getLocationModule()
-      .setFavourites('favourites', allFavourites)
+      .setFavourites(allFavourites)
       .then((res) => {
         setFavourites(allFavourites);
       });
@@ -27,12 +28,23 @@ const Location = () => {
       .getLocalStorageData('countryList')
       .then((res: any) => {
         setCountryList(res?.countryList);
+      })
+      .catch((error) => {
+        console.log({ error });
       });
     content
       .getLocationModule()
       .getFavourites()
       .then((res: any) => {
-        setFavourites(res?.favourites);
+        console.log({ res });
+        if (res?.favourites) {
+          setFavourites(res?.favourites);
+        } else {
+          setFavourites(res);
+        }
+      })
+      .catch((error) => {
+        console.log({ error });
       });
   }, []);
 
@@ -46,12 +58,14 @@ const Location = () => {
               countryList.length > 0 &&
               countryList?.map(
                 (value, key) =>
-                  favourites[value.icon] && (
+                  Object.entries(favourites).length > 0 &&
+                  favourites[value?.code] && (
                     <CountryCardChip
                       key={key}
-                      isoCode={value.code}
-                      countryName={value.name}
-                      active={favourites[value.icon] ? true : false}
+                      isoCode={value?.code}
+                      countryName={value?.name}
+                      onMakeFavourite={onMakeFavourite}
+                      active={favourites[value?.code]}
                     />
                   )
               )}
@@ -61,10 +75,10 @@ const Location = () => {
               countryList?.map((value, key) => (
                 <CountryCardChip
                   key={key}
-                  isoCode={value.code}
-                  countryName={value.name}
+                  isoCode={value?.code}
+                  countryName={value?.name}
                   onMakeFavourite={onMakeFavourite}
-                  active={favourites[value.icon] ? true : false}
+                  active={favourites[value?.code]}
                 />
               ))}
           </div>
