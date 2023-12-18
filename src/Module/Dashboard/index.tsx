@@ -10,6 +10,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     chrome.runtime.sendMessage('getConnection', (res) => {
+      console.log({ res });
       if (res == true) {
         setChecked(true);
       } else {
@@ -25,7 +26,7 @@ const Dashboard = () => {
           chrome.runtime.sendMessage(
             { messageType: 'setConnection', browserType: browserType },
             (res) => {
-              setLoading(false);
+              // setLoading(false);
               if (res == true) {
                 setChecked(true);
               } else {
@@ -40,42 +41,38 @@ const Dashboard = () => {
 
   const handleChange = () => {
     if (!checked) {
-      setLoading(true);
-      setTimeout(() => {
-        setChecked(true);
-      }, 2000);
-    } else {
-      chrome.proxy.settings.clear({}, () => {
-        // setLoading(false);
-        setChecked(false);
-      });
+      // setLoading(true);
+      // setTimeout(() => {
+      setChecked(true);
+      // }, 2000);
     }
+    // else {
+    //   chrome.proxy.settings.clear({}, () => {
+    //     // setLoading(false);
+    //     setChecked(false);
+    //   });
+    // }
   };
 
   return (
     <DashboardLayout>
-      <div className='h-full grid grid-rows-3'>
+      <div className='grid gird-rows-1 h-full'>
         <div className='grid-cols-1'>
-          <div className='flex flex-row justify-between'>
-            <div className='flex flex-col'>
-              <p
-                className={`font-semibold	text-2xl ${
-                  checked ? 'text-green-100' : 'text-red'
-                }`}
-              >
-                {checked ? 'Connected' : 'Unprotected'}
-              </p>
-              <p className='text-black text-xl dark:text-white-100'>
-                {checked
-                  ? 'Your connection is secured'
-                  : 'Connect to stay safe'}
-              </p>
-            </div>
+          <div className='flex flex-col'>
+            <p
+              className={`font-semibold	text-2xl ${
+                checked ? 'text-green-100' : 'text-red'
+              }`}
+            >
+              {checked ? 'Connected' : 'Unprotected'}
+            </p>
+            <p className='text-black text-xl dark:text-white-100'>
+              {checked ? 'Your connection is secured' : 'Connect to stay safe'}
+            </p>
           </div>
         </div>
-
         <div className='grid-cols-1'>
-          <div className='h-full flex flex-col items-center justify-center'>
+          <div className='flex flex-col items-center justify-center'>
             <label
               htmlFor='toggle'
               className='flex items-center cursor-pointer relative'
@@ -138,27 +135,25 @@ const Dashboard = () => {
           </div>
         </div>
         <div className='grid-cols-1'>
-          <div className='h-full flex flex-col justify-center'>
-            <div className='p-4 max-w-md bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700'>
-              <div className='flex items-center space-x-4'>
-                <div className='flex-shrink-0'>
-                  <img
-                    className='w-8 h-8 rounded-full'
-                    src='https://flowbite.com/docs/images/people/profile-picture-1.jpg'
-                    alt='Neil image'
-                  />
-                </div>
-                <div className='flex-1 min-w-0'>
-                  <p className='text-sm font-medium text-gray-900 truncate dark:text-white'>
-                    Neil Sims
-                  </p>
-                  <p className='text-sm text-gray-500 truncate dark:text-gray-400'>
-                    email@windster.com
-                  </p>
-                </div>
-                <div className='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
-                  $320
-                </div>
+          <div className='p-4 max-w-md bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700 place-self-center'>
+            <div className='flex items-center space-x-4'>
+              <div className='flex-shrink-0'>
+                <img
+                  className='w-8 h-8 rounded-full'
+                  src='https://flowbite.com/docs/images/people/profile-picture-1.jpg'
+                  alt='Neil image'
+                />
+              </div>
+              <div className='flex-1 min-w-0'>
+                <p className='text-sm font-medium text-gray-900 truncate dark:text-white'>
+                  Neil Sims
+                </p>
+                <p className='text-sm text-gray-500 truncate dark:text-gray-400'>
+                  email@windster.com
+                </p>
+              </div>
+              <div className='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
+                $320
               </div>
             </div>
           </div>

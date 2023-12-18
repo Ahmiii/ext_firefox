@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from '../tabs/components/Login';
 import Dashboard from '../Module/Dashboard';
+import Location from '../Module/Location';
 import About from '../tabs/components/About';
 
 // const Pages = () => {
@@ -19,7 +20,7 @@ const Root = () => {
       {/* <Pop /> */}
       <Routes>
         <Route path='/' element={<Login />} />
-        <Route path='/countries' element={<About />} />
+        <Route path='/countries' element={<Location />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/settings' element={<About />} />
       </Routes>
