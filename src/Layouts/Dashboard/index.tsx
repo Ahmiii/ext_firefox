@@ -58,7 +58,7 @@ export default (props) => {
   return (
     <div className="h-screen container p-4 bg-white-30 bg-[url('../assets/white_map.svg')] dark:bg-black dark:bg-[url('../assets/map.svg')] bg-no-repeat bg-center">
       <div className='h-full flex flex-col justify-between'>
-        {props.children}
+        <div className='h-full'>{props.children}</div>
         <Tabs tabs={tabList} />
       </div>
     </div>

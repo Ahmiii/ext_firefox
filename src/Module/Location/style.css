@@ -1,3 +1,6 @@
 .locationCard {
   height: calc(100vh - 70px);
 }
+.countryCard {
+  color: #2f373b;
+}

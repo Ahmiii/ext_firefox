@@ -16,10 +16,12 @@ module.exports = {
       current: 'currentColor',
       black: '#111618',
       red: '#FF5C5C',
+      countr_card:'#2F373B',
+      gray: colors.gray,
+      yellow: colors.yellow,
       green: {
         100: '#2CDC82',
       },
-      gray: colors.gray,
       white: {
         100: '#FFFFFF',
         30: '#F9F7FC',
