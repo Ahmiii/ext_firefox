@@ -4,7 +4,6 @@ import Tabs from '../../Molecule/Tabs';
 export default (props) => {
   const navigate = useNavigate();
 
-  console.log('location', { location });
 
   const onClickCountryTab = () => {
     navigate('/countries');

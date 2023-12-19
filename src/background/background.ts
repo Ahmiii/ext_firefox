@@ -15,18 +15,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       });
     return true;
   }
-  if (message == 'getConnection') {
-    content
-      .getConnectionModule()
-      .getConnectionStatus()
-      .then((res) => {
-        sendResponse(res);
-      })
-      .catch((error) => {
-        sendResponse(error);
-      });
-    return true;
-  }
   if (message == 'getAuthenticUser') {
     content
       .getAuthenticationModule()
@@ -56,11 +44,12 @@ chrome.webRequest.onAuthRequired.addListener(
   },
   ['blocking']
 );
-chrome.runtime.setUninstallURL('https://google.com', () => {
-  chrome.proxy.settings.set({
-    value: {
-      mode: 'direct',
-    },
-    scope: 'regular',
-  });
-});
+
+
+// chrome.runtime.setUninstallURL('https://google.com', () => {
+//   console.log('remove proxy called');
+//   content
+//     .getConnectionModule()
+//     .removeConnection()
+//     .then((res) => res);
+// });

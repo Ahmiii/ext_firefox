@@ -6,6 +6,7 @@ const browserType =
   navigator.userAgent.toLowerCase().indexOf('firefox') > -1
     ? 'firefox'
     : 'chrome';
+
 const Dashboard = () => {
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -20,6 +21,7 @@ const Dashboard = () => {
             .getStorageModule()
             .getLocalStorageData('proxyServer')
             .then((response: any) => {
+              setChecked(true);
               chrome.runtime.sendMessage(
                 {
                   messageType: 'setConnection',
@@ -31,35 +33,97 @@ const Dashboard = () => {
             });
         }
       });
-  }, []);
+    content
+      .getStorageModule()
+      .getLocalStorageData('isChangeProxyServer')
+      .then((res: any) => {
+        if (res?.isChangeProxyServer) {
+          setLoading(true);
+          content
+            .getStorageModule()
+            .getLocalStorageData('userData')
+            .then((res: any) => {
+              content
+                .getStorageModule()
+                .getLocalStorageData('countryCode')
+                .then((response: any) => {
+                  const url = `https://api.circuitvpn.com/proxy/server?country_code=${response?.countryCode}`;
+                  const headers = {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${res?.userData?.body?.access_token}`,
+                  };
 
-  useEffect(() => {
-    if (checked) {
-      chrome.runtime.sendMessage('getConnection', (res) => {
-        if (!res) {
-          chrome.runtime.sendMessage(
-            { messageType: 'setConnection', browserType: browserType },
-            (res) => {
-              // setLoading(false);
-              if (res == true) {
-                setChecked(true);
-              } else {
-                setChecked(false);
-              }
-            }
-          );
+                  fetch(url, {
+                    method: 'GET',
+                    headers: headers,
+                  })
+                    .then((res) => {
+                      return res.json();
+                    })
+                    .then((response) => {
+                      console.log({ response });
+                      chrome.runtime.sendMessage({
+                        messageType: 'setConnection',
+                        browserType: browserType,
+                        proxyServer: response?.body,
+                      });
+                      content
+                        .getStorageModule()
+                        .setLocalStorageData('proxyServer', response?.body);
+                    })
+                    .then(() => {
+                      content
+                        .getStorageModule()
+                        .setLocalStorageData('isChangeProxyServer', false)
+                        .then((res) => {
+                          content
+                            .getStorageModule()
+                            .setLocalStorageData('proxied', true)
+                            .then((res) => {
+                              setTimeout(() => {
+                                setLoading(false);
+                                setChecked(true);
+                              }, 2000);
+                            });
+                        });
+                    });
+                });
+            });
         }
       });
-    }
-  }, [checked]);
+  }, []);
 
   const handleChange = () => {
     if (!checked) {
-      setChecked(true);
+      setLoading(true);
+      content
+        .getStorageModule()
+        .setLocalStorageData('proxied', true)
+        .then((res) => {
+          setTimeout(() => {
+            setLoading(false);
+            setChecked(true);
+          }, 2000);
+        });
+      // chrome.runtime.sendMessage(
+      //   { messageType: 'setConnection', browserType: browserType },
+      //   (res) => {
+      //     if (res == true) {
+      //       setChecked(true);
+      //     } else {
+      //       setChecked(false);
+      //     }
+      //   }
+      // );
     } else {
-      chrome.proxy.settings.clear({}, () => {
-        setChecked(false);
-      });
+      content
+        .getStorageModule()
+        .setLocalStorageData('proxied', false)
+        .then(() => {
+          chrome.proxy.settings.clear({}, () => {
+            setChecked(false);
+          });
+        });
     }
   };
 

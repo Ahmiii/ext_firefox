@@ -24,37 +24,64 @@ const Location = () => {
       });
   };
 
-  const onSelectCountry = (e) => {
+  const onChangeCountry = (e) => {
     content
       .getStorageModule()
-      .getLocalStorageData('userData')
-      .then((res: any) => {
-        const url = `https://api.circuitvpn.com/proxy/server?country_code=${e}`;
-        const headers = {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${res?.userData?.body?.access_token}`,
-        };
-
-        fetch(url, {
-          method: 'GET',
-          headers: headers,
-        })
+      .setLocalStorageData('countryCode', e)
+      .then((res) => {
+        content
+          .getStorageModule()
+          .setLocalStorageData('isChangeProxyServer', true)
           .then((res) => {
-            return res.json();
-          })
-          .then((response) => {
             content
               .getStorageModule()
-              .setLocalStorageData('proxyServer', response?.body?.proxy_host)
+              .setLocalStorageData('proxied', false)
               .then((res) => {
-                content
-                  .getStorageModule()
-                  .setLocalStorageData('proxied', true)
-                  .then((res) => {
-                  });
+                navigate('/dashboard');
               });
           });
       });
+    // content
+    //   .getStorageModule()
+    //   .setLocalStorageData('isChangeProxyServer', true)
+    //   .then((res) => {
+    //     content
+    //       .getStorageModule()
+    //       .setLocalStorageData('proxied', false)
+    //       .then((res) => {
+    //         navigate('/dashboard');
+    //       });
+    //   });
+    // content
+    //   .getStorageModule()
+    //   .getLocalStorageData('userData')
+    //   .then((res: any) => {
+    //     const url = `https://api.circuitvpn.com/proxy/server?country_code=${e}`;
+    //     const headers = {
+    //       'Content-Type': 'application/json',
+    //       Authorization: `Bearer ${res?.userData?.body?.access_token}`,
+    //     };
+
+    //     fetch(url, {
+    //       method: 'GET',
+    //       headers: headers,
+    //     })
+    //       .then((res) => {
+    //         return res.json();
+    //       })
+    //       .then((response) => {
+    //         content
+    //           .getStorageModule()
+    //           .setLocalStorageData('proxyServer', response?.body?.proxy_host)
+    //           .then((res) => {
+    //             content
+    //               .getStorageModule()
+    //               .setLocalStorageData('proxied', true)
+    //               .then((res) => {
+    //               });
+    //           });
+    //       });
+    //   });
   };
 
   useEffect(() => {
@@ -71,7 +98,6 @@ const Location = () => {
       .getLocationModule()
       .getFavourites()
       .then((res: any) => {
-        console.log({ res });
         if (res?.favourites) {
           setFavourites(res?.favourites);
         } else {
@@ -100,6 +126,7 @@ const Location = () => {
                       isoCode={value?.code}
                       countryName={value?.name}
                       onMakeFavourite={onMakeFavourite}
+                      onSelectCountry={onChangeCountry}
                       active={favourites[value?.code]}
                     />
                   )
@@ -113,7 +140,7 @@ const Location = () => {
                   isoCode={value?.code}
                   countryName={value?.name}
                   onMakeFavourite={onMakeFavourite}
-                  onSelectCountry={onSelectCountry}
+                  onSelectCountry={onChangeCountry}
                   active={favourites[value?.code]}
                 />
               ))}

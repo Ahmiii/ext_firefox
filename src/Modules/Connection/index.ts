@@ -7,30 +7,24 @@ export class Connection {
     }
   }
 
-  createConnection(browserType: string, proxyServer: string) {
+  createConnection(browserType: string, proxyServer: any) {
     return new Promise(async (resolve, reject) => {
       if (browserType == 'firefox') {
-        function shouldProxyRequest(requestInfo) {
-          console.log({ requestInfo });
-          return requestInfo.parentFrameId == -1;
+        function handleProxyRequest() {
+          return {
+            type: 'http',
+            host: proxyServer?.proxy_host,
+            port: proxyServer?.proxy_port,
+          };
         }
-
-        function handleProxyRequest(requestInfo) {
-          if (shouldProxyRequest(requestInfo)) {
-            console.log(`Proxying: ${requestInfo.url}`);
-            return { type: 'https', host: `${proxyServer}`, port: 10798 };
-          }
-          return { type: 'direct' };
-        }
-
         this.browser.proxy.onRequest.addListener(handleProxyRequest, {
           urls: ['<all_urls>'],
         });
 
         // let proxySettings = {
+        //   autoLogin: true,
         //   proxyType: 'manual',
-        //   http: `${proxyServer}:10780`,
-        //   socksVersion: 4,
+        //   http: `${proxyServer?.proxy_host}:${proxyServer?.proxy_port}`,
         //   httpProxyAll: true,
         // };
         // let status = await this.browser.proxy.settings.set({
@@ -46,7 +40,7 @@ export class Connection {
           if (isPlainHostName(host)) {
             return 'DIRECT';
           }
-          return 'HTTPS ${proxyServer}:10798';
+          return 'HTTPS ${proxyServer?.proxy_host}:${proxyServer?.proxy_port_https}';
         }`;
 
         const config = {
@@ -73,8 +67,8 @@ export class Connection {
   getConnectionStatus() {
     return new Promise((resolve, reject) => {
       chrome.proxy.settings.get({}, (config) => {
+        console.log({ config });
         if (config.levelOfControl === 'controlled_by_this_extension') {
-          console.log({ config });
           if (
             (config?.value && config?.value.mode === 'pac_script') ||
             config?.value?.ssl?.length > 0
@@ -87,6 +81,30 @@ export class Connection {
           reject(false);
         }
       });
+    });
+  }
+  removeConnection() {
+    const browserType =
+      navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+        ? 'firefox'
+        : 'chrome';
+    return new Promise((resolve, reject) => {
+      browserType == 'chrome'
+        ? chrome.proxy.settings.set(
+            {
+              value: {
+                mode: 'direct',
+              },
+              scope: 'regular',
+            },
+            () => resolve(true)
+          )
+        : this.browser.proxy.settings.set(
+            {
+              value: { proxyType: 'none' },
+            },
+            resolve(true)
+          );
     });
   }
 }
