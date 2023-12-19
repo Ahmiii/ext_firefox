@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../Layouts/Dashboard';
+import { Content } from '../../Modules';
+const content = new Content();
 const browserType =
   navigator.userAgent.toLowerCase().indexOf('firefox') > -1
     ? 'firefox'
@@ -9,14 +11,26 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    chrome.runtime.sendMessage('getConnection', (res) => {
-      console.log({ res });
-      if (res == true) {
-        setChecked(true);
-      } else {
-        setChecked(false);
-      }
-    });
+    content
+      .getStorageModule()
+      .getLocalStorageData('proxied')
+      .then((res: any) => {
+        if (res?.proxied == true) {
+          content
+            .getStorageModule()
+            .getLocalStorageData('proxyServer')
+            .then((response: any) => {
+              chrome.runtime.sendMessage(
+                {
+                  messageType: 'setConnection',
+                  browserType: browserType,
+                  proxyServer: response?.proxyServer,
+                },
+                () => setChecked(true)
+              );
+            });
+        }
+      });
   }, []);
 
   useEffect(() => {
@@ -41,17 +55,12 @@ const Dashboard = () => {
 
   const handleChange = () => {
     if (!checked) {
-      // setLoading(true);
-      // setTimeout(() => {
       setChecked(true);
-      // }, 2000);
+    } else {
+      chrome.proxy.settings.clear({}, () => {
+        setChecked(false);
+      });
     }
-    // else {
-    //   chrome.proxy.settings.clear({}, () => {
-    //     // setLoading(false);
-    //     setChecked(false);
-    //   });
-    // }
   };
 
   return (

@@ -2,11 +2,11 @@ import { getUserAuth, bgResponse } from '../utils/common';
 import { Content } from '../Modules';
 let content = new Content();
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  const { messageType, browserType } = message;
+  const { messageType, browserType, proxyServer } = message;
   if (messageType == 'setConnection') {
     content
       .getConnectionModule()
-      .createConnection(browserType)
+      .createConnection(browserType, proxyServer)
       .then((res) => {
         sendResponse(res);
       })
