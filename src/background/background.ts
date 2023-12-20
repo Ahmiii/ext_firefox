@@ -44,12 +44,3 @@ chrome.webRequest.onAuthRequired.addListener(
   },
   ['blocking']
 );
-
-
-// chrome.runtime.setUninstallURL('https://google.com', () => {
-//   console.log('remove proxy called');
-//   content
-//     .getConnectionModule()
-//     .removeConnection()
-//     .then((res) => res);
-// });

@@ -31,7 +31,7 @@ export class Authentication {
   }
 
   getUserLoggedIn() {
-    console.log('yata ak aya')
+    console.log('yata ak aya');
     const setUserAuth = this.setUserAuth;
     return new Promise((resolve, reject) => {
       chrome.windows.create(
@@ -59,6 +59,13 @@ export class Authentication {
                   },
                   (cookie) => {
                     if (cookie) {
+                      // console.log({ cookie });
+                      // chrome.notifications.create('', {
+                      //   type: 'basic',
+                      //   title: 'asdf',
+                      //   message: 'asd',
+                      //   iconUrl: img,
+                      // });
                       if (cookie.hasOwnProperty('value') !== false) {
                         const userData = JSON.parse(
                           decodeURIComponent(cookie.value)

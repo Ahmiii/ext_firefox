@@ -21,10 +21,13 @@ const Login = () => {
           })
           .then((response) => {
             if (response?.header?.response_code == 200) {
-              console.log()
+              console.log();
               chrome.storage.local
-                .set({ 'countryList': response?.body })
+                .set({ countryList: response?.body })
                 .then((res) => {
+                  navigate('/dashboard');
+                })
+                .catch((error) => {
                   navigate('/dashboard');
                 });
             }
@@ -34,8 +37,6 @@ const Login = () => {
   }, []);
 
   const onLoginHandler = () => {
-    // navigate('/dashboard');
-
     chrome.runtime.sendMessage('LogIn', (res) => {});
   };
 
