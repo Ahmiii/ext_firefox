@@ -12,22 +12,22 @@ const CountryCardChip = (props) => {
     onSelectCountry,
   } = props;
   return (
-    <div
-      onClick={() => onSelectCountry(isoCode)}
-      className='rounded-lg place-self-center p-4 mb-2 dark:bg-countr_card'
-    >
-      <div className='flex items-center space-x-4'>
+    <div className='flex justify-between rounded-lg place-self-center p-4 mb-2 dark:bg-countr_card'>
+      <div
+        onClick={() => onSelectCountry(isoCode)}
+        className='w-full flex items-center space-x-4'
+      >
         <CountryIcon isoCode={isoCode} />
         <CountryCardContent
           countryName={countryName}
           countryDescription={countryDescription}
         />
-        <CountryCardStarIcon
-          isoCode={isoCode}
-          active={active}
-          onMakeFavourite={onMakeFavourite}
-        />
       </div>
+      <CountryCardStarIcon
+        isoCode={isoCode}
+        active={active}
+        onMakeFavourite={onMakeFavourite}
+      />
     </div>
   );
 };

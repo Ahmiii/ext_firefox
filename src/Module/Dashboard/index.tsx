@@ -145,7 +145,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className='grid-cols-1'>
-          <div className='flex flex-col items-center justify-center'>
+          <div className='h-full flex flex-col items-center justify-center'>
             <label
               htmlFor='toggle'
               className='flex items-center cursor-pointer relative'
@@ -208,25 +208,27 @@ const Dashboard = () => {
           </div>
         </div>
         <div className='grid-cols-1'>
-          <div className='p-4 max-w-md bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700 place-self-center'>
-            <div className='flex items-center space-x-4'>
-              <div className='flex-shrink-0'>
-                <img
-                  className='w-8 h-8 rounded-full'
-                  src='https://flowbite.com/docs/images/people/profile-picture-1.jpg'
-                  alt='Neil image'
-                />
-              </div>
-              <div className='flex-1 min-w-0'>
-                <p className='text-sm font-medium text-gray-900 truncate dark:text-white'>
-                  Neil Sims
-                </p>
-                <p className='text-sm text-gray-500 truncate dark:text-gray-400'>
-                  email@windster.com
-                </p>
-              </div>
-              <div className='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
-                $320
+          <div className='h-full flex flex-col justify-center'>
+            <div className='w-full p-4 bg-white rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700 place-self-center'>
+              <div className='h-full flex items-center space-x-4'>
+                <div className='flex-shrink-0'>
+                  <img
+                    className='w-8 h-8 rounded-full'
+                    src='https://flowbite.com/docs/images/people/profile-picture-1.jpg'
+                    alt='Neil image'
+                  />
+                </div>
+                <div className='flex-1 min-w-0'>
+                  <p className='text-sm font-medium text-gray-900 truncate dark:text-white'>
+                    Neil Sims
+                  </p>
+                  <p className='text-sm text-gray-500 truncate dark:text-gray-400'>
+                    email@windster.com
+                  </p>
+                </div>
+                <div className='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
+                  $320
+                </div>
               </div>
             </div>
           </div>

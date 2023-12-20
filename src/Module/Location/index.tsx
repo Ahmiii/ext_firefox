@@ -11,6 +11,31 @@ const Location = () => {
   const [countryList, setCountryList] = useState([]);
   const [favourites, setFavourites] = useState({});
 
+  useEffect(() => {
+    content
+      .getStorageModule()
+      .getLocalStorageData('countryList')
+      .then((res: any) => {
+        setCountryList(res?.countryList);
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+    content
+      .getLocationModule()
+      .getFavourites()
+      .then((res: any) => {
+        if (res?.favourites) {
+          setFavourites(res?.favourites);
+        } else {
+          setFavourites(res);
+        }
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  }, []);
+
   const onMakeFavourite = (e) => {
     let allFavourites = {
       ...favourites,
@@ -41,80 +66,18 @@ const Location = () => {
               });
           });
       });
-    // content
-    //   .getStorageModule()
-    //   .setLocalStorageData('isChangeProxyServer', true)
-    //   .then((res) => {
-    //     content
-    //       .getStorageModule()
-    //       .setLocalStorageData('proxied', false)
-    //       .then((res) => {
-    //         navigate('/dashboard');
-    //       });
-    //   });
-    // content
-    //   .getStorageModule()
-    //   .getLocalStorageData('userData')
-    //   .then((res: any) => {
-    //     const url = `https://api.circuitvpn.com/proxy/server?country_code=${e}`;
-    //     const headers = {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${res?.userData?.body?.access_token}`,
-    //     };
-
-    //     fetch(url, {
-    //       method: 'GET',
-    //       headers: headers,
-    //     })
-    //       .then((res) => {
-    //         return res.json();
-    //       })
-    //       .then((response) => {
-    //         content
-    //           .getStorageModule()
-    //           .setLocalStorageData('proxyServer', response?.body?.proxy_host)
-    //           .then((res) => {
-    //             content
-    //               .getStorageModule()
-    //               .setLocalStorageData('proxied', true)
-    //               .then((res) => {
-    //               });
-    //           });
-    //       });
-    //   });
   };
 
-  useEffect(() => {
+  const onSearchInputHandler = (e) => {
     content
       .getStorageModule()
       .getLocalStorageData('countryList')
       .then((res: any) => {
-        setCountryList(res?.countryList);
-      })
-      .catch((error) => {
-        console.log({ error });
+        let filterCountries = res?.countryList.filter((country) =>
+          country?.name.toLowerCase().includes(e.target.value.toLowerCase())
+        );
+        setCountryList(filterCountries);
       });
-    content
-      .getLocationModule()
-      .getFavourites()
-      .then((res: any) => {
-        if (res?.favourites) {
-          setFavourites(res?.favourites);
-        } else {
-          setFavourites(res);
-        }
-      })
-      .catch((error) => {
-        console.log({ error });
-      });
-  }, []);
-
-  const onSearchInputHandler = (e) => {
-    console.log(e.target.value);
-    let filterCountries = countryList.filter((country) =>
-      country?.name.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setCountryList(filterCountries);
   };
 
   return (
