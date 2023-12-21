@@ -14,7 +14,13 @@ const CountryCardChip = (props) => {
   return (
     <div className='flex justify-between rounded-lg place-self-center p-4 mb-2 dark:bg-countr_card'>
       <div
-        onClick={() => onSelectCountry(isoCode)}
+        onClick={() =>
+          onSelectCountry({
+            isoCode: isoCode,
+            countryName: countryName,
+            isChangeProxyServer: true,
+          })
+        }
         className='w-full flex items-center space-x-4'
       >
         <CountryIcon isoCode={isoCode} />

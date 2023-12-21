@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../../Layouts/Dashboard';
 import { Content } from '../../Modules';
+import axios from '../../utils/axiosInterceptor';
+import CountryIcon from '../../Atoms/CountryCardIcon';
+import CountryCardContent from '../../Atoms/CountryCardContent';
 const content = new Content();
 const browserType =
   navigator.userAgent.toLowerCase().indexOf('firefox') > -1
@@ -10,120 +13,128 @@ const browserType =
 const Dashboard = () => {
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [connectionDetail, setConnectionDetail] = useState({
+    isoCode: '',
+    countryName: '',
+  });
 
   useEffect(() => {
     content
       .getStorageModule()
-      .getLocalStorageData('proxied')
-      .then((res: any) => {
-        if (res?.proxied == true) {
-          content
-            .getStorageModule()
-            .getLocalStorageData('proxyServer')
-            .then((response: any) => {
-              setChecked(true);
-              chrome.runtime.sendMessage(
-                {
-                  messageType: 'setConnection',
-                  browserType: browserType,
-                  proxyServer: response?.proxyServer,
-                },
-                () => setChecked(true)
-              );
-            });
+      .getLocalStorageData('proxyConfig')
+      .then((proxyConfigResponse: any) => {
+        let proxyConfigration = proxyConfigResponse?.proxyConfig;
+        setConnectionDetail(proxyConfigration);
+        if (proxyConfigration?.proxied == true) {
+          chrome.runtime.sendMessage(
+            {
+              messageType: 'setConnection',
+              browserType: browserType,
+              proxyServer: proxyConfigration?.proxyServer,
+            },
+            () => setChecked(true)
+          );
         }
       });
+
     content
       .getStorageModule()
-      .getLocalStorageData('isChangeProxyServer')
-      .then((res: any) => {
-        if (res?.isChangeProxyServer) {
+      .getLocalStorageData('proxyConfig')
+      .then((proxyConfigResponse: any) => {
+        let proxyConfigration = proxyConfigResponse?.proxyConfig;
+        if (proxyConfigration?.isChangeProxyServer) {
           setLoading(true);
-          content
-            .getStorageModule()
-            .getLocalStorageData('userData')
-            .then((res: any) => {
-              content
-                .getStorageModule()
-                .getLocalStorageData('countryCode')
-                .then((response: any) => {
-                  const url = `https://api.circuitvpn.com/proxy/server?country_code=${response?.countryCode}`;
-                  const headers = {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${res?.userData?.body?.access_token}`,
-                  };
-
-                  fetch(url, {
-                    method: 'GET',
-                    headers: headers,
-                  })
-                    .then((res) => {
-                      return res.json();
-                    })
-                    .then((response) => {
-                      console.log({ response });
-                      chrome.runtime.sendMessage({
-                        messageType: 'setConnection',
-                        browserType: browserType,
-                        proxyServer: response?.body,
-                      });
-                      content
-                        .getStorageModule()
-                        .setLocalStorageData('proxyServer', response?.body);
-                    })
-                    .then(() => {
-                      content
-                        .getStorageModule()
-                        .setLocalStorageData('isChangeProxyServer', false)
-                        .then((res) => {
-                          content
-                            .getStorageModule()
-                            .setLocalStorageData('proxied', true)
-                            .then((res) => {
-                              setTimeout(() => {
-                                setLoading(false);
-                                setChecked(true);
-                              }, 2000);
-                            });
-                        });
-                    });
-                });
-            });
+          axios
+            .get(`/proxy/server?country_code=${proxyConfigration?.isoCode}`)
+            .then((proxyReceieveResponse) => {
+              let proxyServerResponse = proxyReceieveResponse?.data;
+              if (proxyServerResponse.header?.response_code == 200) {
+                chrome.runtime.sendMessage(
+                  {
+                    messageType: 'setConnection',
+                    browserType: browserType,
+                    proxyServer: proxyServerResponse?.body,
+                  },
+                  () => {
+                    let updateConfig = {
+                      ...proxyConfigration,
+                      isChangeProxyServer: false,
+                      proxied: true,
+                      proxyServer: proxyServerResponse?.body,
+                    };
+                    content
+                      .getStorageModule()
+                      .setLocalStorageData('proxyConfig', updateConfig)
+                      .then((res) => {
+                        setConnectionDetail(updateConfig);
+                        setLoading(false);
+                        setChecked(true);
+                      })
+                      .catch((error) => console.log({ error }));
+                  }
+                );
+              }
+            })
+            .catch((error) => console.log({ error }));
         }
-      });
+      })
+      .catch((error) => console.log({ error }));
   }, []);
 
-  const handleChange = () => {
+  const handleChange = async () => {
+    let proxyConfigration = await content
+      .getStorageModule()
+      .getLocalStorageData('proxyConfig')
+      .then((res: any) => res?.proxyConfig);
     if (!checked) {
       setLoading(true);
-      content
-        .getStorageModule()
-        .setLocalStorageData('proxied', true)
-        .then((res) => {
-          setTimeout(() => {
-            setLoading(false);
-            setChecked(true);
-          }, 2000);
+      await axios
+        .get(`/proxy/server?country_code=${proxyConfigration?.isoCode}`)
+        .then((proxyReceieveResponse) => {
+          let proxyServerResponse = proxyReceieveResponse?.data;
+          if (proxyServerResponse.header?.response_code == 200) {
+            chrome.runtime.sendMessage(
+              {
+                messageType: 'setConnection',
+                browserType: browserType,
+                proxyServer: proxyServerResponse?.body,
+              },
+              () => {
+                let updateConfig = {
+                  ...proxyConfigration,
+                  isChangeProxyServer: false,
+                  proxied: true,
+                  proxyServer: proxyServerResponse?.body,
+                };
+
+                content
+                  .getStorageModule()
+                  .setLocalStorageData('proxyConfig', updateConfig)
+                  .then((res) => {
+                    setLoading(false);
+                    setChecked(true);
+                  })
+                  .catch((error) => console.log({ error }));
+              }
+            );
+          }
         });
-      // chrome.runtime.sendMessage(
-      //   { messageType: 'setConnection', browserType: browserType },
-      //   (res) => {
-      //     if (res == true) {
-      //       setChecked(true);
-      //     } else {
-      //       setChecked(false);
-      //     }
-      //   }
-      // );
     } else {
-      content
-        .getStorageModule()
-        .setLocalStorageData('proxied', false)
-        .then(() => {
-          chrome.proxy.settings.clear({}, () => {
+      chrome.proxy.settings.clear({}, () => {
+        let updateConfig = {
+          ...proxyConfigration,
+          isChangeProxyServer: false,
+          proxied: false,
+          proxyServer: '',
+        };
+        content
+          .getStorageModule()
+          .setLocalStorageData('proxyConfig', updateConfig)
+          .then((res) => {
             setChecked(false);
-          });
-        });
+          })
+          .catch((error) => console.log({ error }));
+      });
     }
   };
 
@@ -209,28 +220,17 @@ const Dashboard = () => {
         </div>
         <div className='grid-cols-1'>
           <div className='h-full flex flex-col justify-center'>
-            <div className='w-full p-4 bg-white rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700 place-self-center'>
-              <div className='h-full flex items-center space-x-4'>
-                <div className='flex-shrink-0'>
-                  <img
-                    className='w-8 h-8 rounded-full'
-                    src='https://flowbite.com/docs/images/people/profile-picture-1.jpg'
-                    alt='Neil image'
+            {connectionDetail?.isoCode.length && (
+              <div className='h-18 w-full p-4 bg-white rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700 place-self-center'>
+                <div className='flex items-center space-x-4'>
+                  <CountryIcon isoCode={connectionDetail?.isoCode} />
+                  <CountryCardContent
+                    countryName={connectionDetail?.countryName}
+                    countryDescription='Selected Server'
                   />
                 </div>
-                <div className='flex-1 min-w-0'>
-                  <p className='text-sm font-medium text-gray-900 truncate dark:text-white'>
-                    Neil Sims
-                  </p>
-                  <p className='text-sm text-gray-500 truncate dark:text-gray-400'>
-                    email@windster.com
-                  </p>
-                </div>
-                <div className='inline-flex items-center text-base font-semibold text-gray-900 dark:text-white'>
-                  $320
-                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

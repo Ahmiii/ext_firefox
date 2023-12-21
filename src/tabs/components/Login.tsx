@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
+  // useEffect(() => {
+  //   navigate('/dashboard');
+  // }, []);
+
   useEffect(() => {
     chrome.runtime.sendMessage('getAuthenticUser', (res) => {
       if (res?.userData) {

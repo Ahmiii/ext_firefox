@@ -52,7 +52,7 @@ const Location = () => {
   const onChangeCountry = (e) => {
     content
       .getStorageModule()
-      .setLocalStorageData('countryCode', e)
+      .setLocalStorageData('proxyConfig', e)
       .then((res) => {
         content
           .getStorageModule()
