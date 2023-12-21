@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from '../tabs/components/Login';
+import Login from '../Module/LoggingIn';
 import Dashboard from '../Module/Dashboard';
 import Location from '../Module/Location';
-import About from '../tabs/components/About';
+import About from '../Module/Settings';
 
 // const Pages = () => {
 //   return (
