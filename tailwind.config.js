@@ -16,7 +16,8 @@ module.exports = {
       current: 'currentColor',
       black: '#111618',
       red: '#FF5C5C',
-      countr_card:'#2F373B',
+      countr_card: '#2F373B',
+      iconColor: '#B7B7B7',
       gray: colors.gray,
       yellow: colors.yellow,
       green: {
