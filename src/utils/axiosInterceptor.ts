@@ -9,10 +9,9 @@ authInterceptors.interceptors.request.use(
   (config) => {
     return content
       .getStorageModule()
-      .getLocalStorageData('userData')
+      .getLocalStorageData('userDetail')
       .then((res: any) => {
-        console.log({ res });
-        let token = res?.userData?.body;
+        let token = res?.userDetail?.auth_info?.body;
         if (token?.access_token) {
           config.headers['Content-Type'] = `application/json`;
           config.headers['Authorization'] = `Bearer ${token.access_token}`;

@@ -19,7 +19,6 @@ const Location = () => {
         setCountryList(res?.countryList);
       })
       .catch((error) => {
-        console.log({ error });
       });
     content
       .getLocationModule()
@@ -32,7 +31,6 @@ const Location = () => {
         }
       })
       .catch((error) => {
-        console.log({ error });
       });
   }, []);
 

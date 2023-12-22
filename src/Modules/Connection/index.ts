@@ -2,7 +2,6 @@ export class Connection {
   private browser: any;
   constructor() {
     if (typeof window !== 'undefined') {
-      //This code is executed in the browser
       this.browser = (window as any).browser;
     }
   }
@@ -35,6 +34,7 @@ export class Connection {
         // } else {
         //   reject(false);
         // }
+        resolve(true);
       } else {
         const pacScript = `function FindProxyForURL(url, host) {
           if (isPlainHostName(host)) {

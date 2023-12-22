@@ -3,12 +3,14 @@ export class Storage {
 
   setLocalStorageData(key: string, value: any) {
     return new Promise((resolve, reject) => {
+      console.log({ key, value });
       chrome.storage.local
         .set({ [key]: value })
         .then((result) => {
           resolve(result);
         })
         .catch((error) => {
+          console.log({ error });
           reject(error);
         });
     });

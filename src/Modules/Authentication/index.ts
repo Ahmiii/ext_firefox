@@ -7,7 +7,7 @@ export class Authentication {
   getUserAuth() {
     return new Promise((resolve, reject) => {
       chrome.storage.local
-        .get(['userData'])
+        .get(['userDetail'])
         .then((result) => {
           resolve(result);
         })
@@ -17,21 +17,16 @@ export class Authentication {
     });
   }
 
-  setUserAuth(userData) {
+  setUserAuth(value) {
     return new Promise((resolve, reject) => {
       chrome.storage.local
-        .set({ userData })
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((error) => {
-          reject(error);
-        });
+        .set({ ['userDetail']: value })
+        .then((res) => resolve(res))
+        .catch((error) => reject(error));
     });
   }
 
   getUserLoggedIn() {
-    console.log('yata ak aya');
     const setUserAuth = this.setUserAuth;
     return new Promise((resolve, reject) => {
       chrome.windows.create(
@@ -52,30 +47,29 @@ export class Authentication {
                 tab.url ===
                 'https://authentication.circuitvpn.com/login/proxy/success'
               ) {
-                chrome.cookies.get(
+                chrome.cookies.getAll(
                   {
                     url: 'https://authentication.circuitvpn.com',
-                    name: 'auth_info',
                   },
-                  (cookie) => {
-                    if (cookie) {
-                      // console.log({ cookie });
-                      // chrome.notifications.create('', {
-                      //   type: 'basic',
-                      //   title: 'asdf',
-                      //   message: 'asd',
-                      //   iconUrl: img,
-                      // });
-                      if (cookie.hasOwnProperty('value') !== false) {
-                        const userData = JSON.parse(
-                          decodeURIComponent(cookie.value)
-                        );
-                        setUserAuth(userData).then((res) => {
-                          chrome.tabs.remove(tabId);
-                          resolve(res);
-                        });
-                      }
-                    }
+                  (cookies) => {
+                    let cookieObj = {};
+                    let filtercookies = cookies.filter((value) => {
+                      return (
+                        value.name === 'auth_info' || value.name === 'user_info'
+                      );
+                    });
+                    filtercookies.map((cookie) => {
+                      cookieObj[cookie.name] = JSON.parse(
+                        decodeURIComponent(cookie?.value)
+                      );
+                    });
+                    setUserAuth(cookieObj)
+                      .then((res) => {
+                        resolve(tabId);
+                      })
+                      .catch((error) => {
+                        reject(error);
+                      });
                   }
                 );
               }

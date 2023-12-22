@@ -67,7 +67,6 @@ const ListItemComponnet = ({ icon, itemName, action, onClick }) => (
 const Settings = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
-  console.log({ showLogoutModal });
   return (
     <>
       <DashboardLayout>
