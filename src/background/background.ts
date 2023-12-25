@@ -15,6 +15,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       });
     return true;
   }
+  if (messageType == 'removeConnection') {
+    console.log('hello')
+    content
+      .getConnectionModule()
+      .removeConnection()
+      .then((res) => {
+        console.log({res})
+        sendResponse(res);
+      })
+      .catch((error) => {
+        sendResponse(error);
+      });
+    return true;
+  }
   if (message == 'getAuthenticUser') {
     content
       .getAuthenticationModule()
