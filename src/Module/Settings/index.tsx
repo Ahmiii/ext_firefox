@@ -94,7 +94,7 @@ const Settings = () => {
           </div>
         </div>
       </DashboardLayout>
-      <Modal show={showLogoutModal} />
+      <Modal onCloseModal={setShowLogoutModal} show={showLogoutModal} />
     </>
   );
 };
