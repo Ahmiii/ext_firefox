@@ -9,32 +9,32 @@ export class Connection {
   createConnection(browserType: string, proxyServer: any) {
     return new Promise(async (resolve, reject) => {
       if (browserType == 'firefox') {
-        function handleProxyRequest() {
-          return {
-            type: 'http',
-            host: proxyServer?.proxy_host,
-            port: proxyServer?.proxy_port,
-          };
-        }
-        this.browser.proxy.onRequest.addListener(handleProxyRequest, {
-          urls: ['<all_urls>'],
-        });
-
-        // let proxySettings = {
-        //   autoLogin: true,
-        //   proxyType: 'manual',
-        //   http: `${proxyServer?.proxy_host}:${proxyServer?.proxy_port}`,
-        //   httpProxyAll: true,
-        // };
-        // let status = await this.browser.proxy.settings.set({
-        //   value: proxySettings,
-        // });
-        // if (status == true) {
-        //   resolve(true);
-        // } else {
-        //   reject(false);
+        // function handleProxyRequest() {
+        //   return {
+        //     type: 'http',
+        //     host: proxyServer?.proxy_host,
+        //     port: proxyServer?.proxy_port,
+        //   };
         // }
-        resolve(true);
+        // this.browser.proxy.onRequest.addListener(handleProxyRequest, {
+        //   urls: ['<all_urls>'],
+        // });
+
+        let proxySettings = {
+          autoLogin: true,
+          proxyType: 'manual',
+          http: `${proxyServer?.proxy_host}:${proxyServer?.proxy_port}`,
+          httpProxyAll: true,
+        };
+        let status = await this.browser.proxy.settings.set({
+          value: proxySettings,
+        });
+        if (status == true) {
+          resolve(true);
+        } else {
+          reject(false);
+        }
+        // resolve(true);
       } else {
         const pacScript = `function FindProxyForURL(url, host) {
           if (isPlainHostName(host)) {
@@ -83,28 +83,21 @@ export class Connection {
       });
     });
   }
-  removeConnection() {
-    const browserType =
-      navigator.userAgent.toLowerCase().indexOf('firefox') > -1
-        ? 'firefox'
-        : 'chrome';
-    return new Promise((resolve, reject) => {
-      browserType == 'chrome'
-        ? chrome.proxy.settings.set(
-            {
-              value: {
-                mode: 'direct',
-              },
-              scope: 'regular',
-            },
-            () => resolve(true)
-          )
-        : this.browser.proxy.settings.set(
-            {
-              value: { proxyType: 'none' },
-            },
-            resolve(true)
-          );
+  removeConnection(browserType) {
+    return new Promise(async (resolve, reject) => {
+      let proxySettings = {
+        autoLogin: false,
+        proxyType: 'none',
+        http: '',
+        httpProxyAll: false,
+      };
+      browserType == 'firefox'
+        ? await this.browser.proxy.settings.set({
+            value: proxySettings,
+          })
+        : chrome.proxy.settings.clear({}, () => {});
+
+      resolve(true);
     });
   }
 }

@@ -120,21 +120,39 @@ const Dashboard = () => {
           }
         });
     } else {
-      chrome.proxy.settings.clear({}, () => {
-        let updateConfig = {
-          ...proxyConfigration,
-          isChangeProxyServer: false,
-          proxied: false,
-          proxyServer: '',
-        };
-        content
-          .getStorageModule()
-          .setLocalStorageData('proxyConfig', updateConfig)
-          .then((res) => {
-            setChecked(false);
-          })
-          .catch((error) => console.log({ error }));
-      });
+      chrome.runtime.sendMessage(
+        { messageType: 'removeConnection', browserType: browserType },
+        () => {
+          let updateConfig = {
+            ...proxyConfigration,
+            isChangeProxyServer: false,
+            proxied: false,
+            proxyServer: '',
+          };
+          content
+            .getStorageModule()
+            .setLocalStorageData('proxyConfig', updateConfig)
+            .then((res) => {
+              setChecked(false);
+            })
+            .catch((error) => console.log({ error }));
+        }
+      );
+      // chrome.proxy.settings.clear({}, () => {
+      //   let updateConfig = {
+      //     ...proxyConfigration,
+      //     isChangeProxyServer: false,
+      //     proxied: false,
+      //     proxyServer: '',
+      //   };
+      //   content
+      //     .getStorageModule()
+      //     .setLocalStorageData('proxyConfig', updateConfig)
+      //     .then((res) => {
+      //       setChecked(false);
+      //     })
+      //     .catch((error) => console.log({ error }));
+      // });
     }
   };
 

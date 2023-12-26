@@ -22,7 +22,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (messageType == 'removeConnection') {
     content
       .getConnectionModule()
-      .removeConnection()
+      .removeConnection(browserType)
       .then((res) => {
         sendResponse(res);
       })
@@ -44,7 +44,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     content
       .getAuthenticationModule()
       .getUserLoggedIn()
-      .then((res1:any) => {
+      .then((res1: any) => {
         let initialProxy = {
           countryName: 'United States',
           isChangeProxyServer: false,
