@@ -145,13 +145,25 @@ const Dashboard = () => {
           <div className='flex flex-col'>
             <p
               className={`font-semibold	text-2xl ${
-                checked ? 'text-green-100' : 'text-red'
+                checked
+                  ? 'text-green-100'
+                  : loading
+                  ? 'dark:text-white-100'
+                  : 'text-red'
               }`}
             >
-              {checked ? 'Connected' : 'Unprotected'}
+              {checked
+                ? 'Connected'
+                : loading
+                ? 'Connecting ...'
+                : 'Unprotected'}
             </p>
             <p className='text-black text-xl dark:text-white-100'>
-              {checked ? 'Your connection is secured' : 'Connect to stay safe'}
+              {checked
+                ? 'Your connection is secured'
+                : loading
+                ? 'Looking for fastest VPN server'
+                : 'Connect to stay safe'}
             </p>
           </div>
         </div>
@@ -171,7 +183,7 @@ const Dashboard = () => {
                   disabled={loading}
                 />
                 <div
-                  className={`bg-gray-600 w-26 h-14 rounded-full ${
+                  className={`bg-toogle_white fill-white-100 dark:bg-gray-600 w-26 h-14 rounded-full ${
                     loading ? 'opacity-50 pointer-events-none' : ''
                   }`}
                 ></div>
@@ -180,41 +192,32 @@ const Dashboard = () => {
                     checked ? 'translate-x-full bg-green-100' : ''
                   } ${loading ? 'translate-x-full' : ''}`}
                 >
-                  {loading ? (
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='40'
-                      height='54'
-                      viewBox='0 0 20 27'
-                      fill='currentColor'
-                    >
-                      <path
-                        fillRule='evenodd'
-                        d='M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z'
-                        clipRule='evenodd'
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      width='40'
-                      height='45'
-                      viewBox='0 0 11 27'
-                      fill='none'
-                      xmlns='http://www.w3.org/2000/svg'
-                    >
-                      <path
-                        fillRule='evenodd'
-                        clipRule='evenodd'
-                        d='M10.0587 1.86341C10.1543 0.807674 8.75724 0.348361 8.20767 1.25483L0.290717 14.313C-0.11333 14.9795 0.36648 15.8315 1.14583 15.8315H4.23538C4.82325 15.8315 5.28429 16.3361 5.23131 16.9216L4.47185 25.3145C4.37632 26.3703 5.77332 26.8295 6.32289 25.9231L14.2399 12.865C14.644 12.1985 14.1642 11.3465 13.3848 11.3465H10.295C9.7071 11.3465 9.24605 10.8419 9.29905 10.2564L10.0587 1.86341Z'
-                        fill='#222A2F'
-                      />
-                    </svg>
-                  )}
+                  <svg
+                    width='40'
+                    height='45'
+                    viewBox='0 0 11 27'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      fillRule='evenodd'
+                      clipRule='evenodd'
+                      d='M10.0587 1.86341C10.1543 0.807674 8.75724 0.348361 8.20767 1.25483L0.290717 14.313C-0.11333 14.9795 0.36648 15.8315 1.14583 15.8315H4.23538C4.82325 15.8315 5.28429 16.3361 5.23131 16.9216L4.47185 25.3145C4.37632 26.3703 5.77332 26.8295 6.32289 25.9231L14.2399 12.865C14.644 12.1985 14.1642 11.3465 13.3848 11.3465H10.295C9.7071 11.3465 9.24605 10.8419 9.29905 10.2564L10.0587 1.86341Z'
+                      className={`${
+                        !checked ? 'fill-toogle_white' : 'fill-white-100'
+                      }  dark:fill-gray-600`}
+                      // fill='#222A2F'
+                    />
+                  </svg>
                 </div>
               </div>
             </label>
             <p className='text-xl mt-6 dark:text-white-100'>
-              {checked ? 'Click To Disconnect' : 'Click To Connect'}
+              {checked
+                ? 'Click To Disconnect'
+                : loading
+                ? 'Connecting'
+                : 'Click To Connect'}
             </p>
           </div>
         </div>
