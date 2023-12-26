@@ -6,3 +6,16 @@ body {
   height: 580px;
   width: 390px;
 }
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #3c464b;
+  border-radius: 10px;
+}

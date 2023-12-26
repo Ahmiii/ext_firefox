@@ -242,7 +242,7 @@ const Dashboard = () => {
         <div className='grid-cols-1'>
           <div className='h-full flex flex-col justify-center'>
             {connectionDetail?.isoCode.length && (
-              <div className='h-18 w-full p-4 bg-white rounded-lg border shadow-md dark:bg-gray-800 dark:border-gray-700 place-self-center'>
+              <div className='h-18 w-full p-4 bg-white rounded-lg border shadow-md bg-white-100 dark:bg-gray-800 dark:border-gray-700 place-self-center'>
                 <div className='flex items-center space-x-4'>
                   <CountryIcon isoCode={connectionDetail?.isoCode} />
                   <CountryCardContent

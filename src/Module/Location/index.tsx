@@ -35,6 +35,7 @@ const Location = () => {
   }, []);
 
   const onMakeFavourite = (e) => {
+    console.log({e})
     let allFavourites = {
       ...favourites,
       [e.target.id]: favourites[e.target.id] ? false : true,

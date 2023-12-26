@@ -12,7 +12,7 @@ const CountryCardChip = (props) => {
     onSelectCountry,
   } = props;
   return (
-    <div className='flex justify-between rounded-lg place-self-center p-4 mb-2 dark:bg-countr_card'>
+    <div className='flex justify-between rounded-lg place-self-center p-4 mb-2 bg-white-100 dark:bg-countr_card'>
       <div
         onClick={() =>
           onSelectCountry({
