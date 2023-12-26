@@ -44,8 +44,26 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     content
       .getAuthenticationModule()
       .getUserLoggedIn()
-      .then((res) => {
-        sendResponse(res);
+      .then((res1:any) => {
+        let initialProxy = {
+          countryName: 'United States',
+          isChangeProxyServer: false,
+          isoCode: 'US',
+          proxied: false,
+          proxyServer: {
+            proxy_host: '',
+            proxy_ip_address: '',
+            proxy_port: '',
+            proxy_port_https: '',
+          },
+        };
+        content
+          .getStorageModule()
+          .setLocalStorageData('proxyConfig', initialProxy)
+          .then((res: any) => {
+            chrome.tabs.remove(res1);
+          });
+        sendResponse(res1);
       });
     return true;
   }
