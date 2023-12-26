@@ -1,6 +1,10 @@
 import { getUserAuth, bgResponse } from '../utils/common';
 import { Content } from '../Modules';
 let content = new Content();
+const browserType =
+  navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+    ? 'firefox'
+    : 'chrome';
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const { messageType, browserType, proxyServer } = message;
   if (messageType == 'setConnection') {
@@ -16,12 +20,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
   if (messageType == 'removeConnection') {
-    console.log('hello')
     content
       .getConnectionModule()
       .removeConnection()
       .then((res) => {
-        console.log({res})
         sendResponse(res);
       })
       .catch((error) => {
@@ -49,12 +51,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-chrome.webRequest.onAuthRequired.addListener(
-  function (details) {
-    return getUserAuth();
-  },
-  {
-    urls: ['<all_urls>'],
-  },
-  ['blocking']
-);
+browserType == 'chrome'
+  ? chrome.webRequest.onAuthRequired.addListener(
+      function (details, asyncCallback) {
+        getUserAuth().then((response) => {
+          return asyncCallback(response);
+        });
+      },
+      {
+        urls: ['<all_urls>'],
+      },
+      ['asyncBlocking']
+    )
+  : chrome.webRequest.onAuthRequired.addListener(
+      function (details) {
+        return getUserAuth().then((response) => response);
+      },
+      {
+        urls: ['<all_urls>'],
+      },
+      ['blocking']
+    );

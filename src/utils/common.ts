@@ -1,5 +1,3 @@
-import { Content } from '../Modules';
-
 export const bgResponse = (statusCode, message) => {
   return {
     status: statusCode,
@@ -7,13 +5,12 @@ export const bgResponse = (statusCode, message) => {
   };
 };
 
-export const getUserAuth = () => {
-  chrome.storage.local.get(['userDetail']).then((response) => {
-    return {
-      authCredentials: {
-        username: response?.userDetail?.user_info?.body?.vpn_username,
-        password: response?.userDetail?.user_info?.body?.vpn_password,
-      },
-    };
-  });
+export const getUserAuth = async () => {
+  let data = await chrome.storage.local.get(['userDetail']);
+  return {
+    authCredentials: {
+      username: data?.userDetail?.user_info?.body?.vpn_username,
+      password: data?.userDetail?.user_info?.body?.vpn_password,
+    },
+  };
 };
