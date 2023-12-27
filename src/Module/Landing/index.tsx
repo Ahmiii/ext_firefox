@@ -20,7 +20,7 @@ const Landing = () => {
                 .getStorageModule()
                 .setLocalStorageData('countryList', countryResponse?.body)
                 .then((res) => {
-                  navigate('dashboard');
+                  // navigate('dashboard');
                 });
             }
           });

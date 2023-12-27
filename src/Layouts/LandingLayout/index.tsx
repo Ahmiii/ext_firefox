@@ -13,7 +13,14 @@ const LandingLayout = () => {
           justifyContent: 'space-around',
         }}
       >
-        <img src={require(`../../assets/Logo.png`).default} />
+        <img
+          className='block dark:hidden'
+          src={require('../../assets/whiteLogo.png').default}
+        />
+        <img
+          className='hidden dark:block'
+          src={require('../../assets/Logo.png').default}
+        />
         <p className='text-base dark:text-white-100'>Loading...</p>
       </div>
     </div>
