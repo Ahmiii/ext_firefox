@@ -84,7 +84,7 @@ const Location = () => {
       <div className='grid gird-rows-1 gap-6'>
         <div className='grid-cols-1'>
           <p
-            className='text-2xl font-medium dark:text-white-100'
+            className='text-2xl font-medium cursor-pointer dark:text-white-100'
             onClick={() => navigate('/dashboard')}
           >
             {'< Country'}

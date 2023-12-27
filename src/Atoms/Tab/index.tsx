@@ -11,16 +11,20 @@ const Tab = ({ onClick, tabPath, tabText, svgPath }) => {
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 20 20'
         className={`w-5 h-5 ${
-          location?.pathname == tabPath ? 'fill-red' : 'fill-gray-500'
+          location?.pathname.includes(tabPath) ? 'fill-red' : 'fill-gray-500'
         }`}
       >
         {svgPath}
       </svg>
 
-      <p className={tabPath === location.pathname ? 'text-red' : 'text-gray-500'}>
+      <p
+        className={
+          location.pathname.includes(tabPath) ? 'text-red' : 'text-gray-500'
+        }
+      >
         {tabText}
       </p>
-      {tabPath === location.pathname && (
+      {location.pathname.includes(tabPath) && (
         <div className='relative w-24'>
           <div className='absolute inset-x-0 bottom-[-16px] h-1 rounded-t-lg bg-red'></div>
         </div>

@@ -18,6 +18,7 @@ module.exports = {
       red: '#FF5C5C',
       countr_card: '#2F373B',
       toogle_white: '#E3D7E7',
+      slate: colors.slate,
       iconColor: '#B7B7B7',
       gray: colors.gray,
       yellow: colors.yellow,

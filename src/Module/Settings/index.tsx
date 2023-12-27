@@ -10,42 +10,46 @@ import {
   ArrowRightIcon,
   LogoutIcon,
 } from '../../Atoms/CustomIcon';
-const settingList = (setShowLogoutModal) => [
-  {
-    icon: <UserDetailIcon />,
-    title: 'Account Details',
-    component: '',
-    action: <ArrowRightIcon />,
-    onClick: () => {},
-  },
-  {
-    icon: <StarIcon />,
-    title: 'Rate Us',
-    component: '',
-    onClick: () => {},
-  },
-  {
-    icon: <PrivacyPolicyIcon />,
-    title: 'Privacy Policy',
-    component: '',
-    onClick: () => {},
-  },
-  {
-    icon: <FaqsIcon />,
-    title: 'FAQs',
-    component: '',
-    onClick: () => {},
-  },
-  {
-    icon: <LogoutIcon />,
-    title: 'Lougout',
-    component: '',
-    onClick: () => {
-      setShowLogoutModal(true);
+const settingList = (setShowLogoutModal) => {
+  const navigate = useNavigate();
+  return [
+    {
+      icon: <UserDetailIcon />,
+      title: 'Account Details',
+      component: '',
+      action: <ArrowRightIcon />,
+      onClick: () => {
+        navigate('/settings/account-details');
+      },
     },
-  },
-];
-
+    {
+      icon: <StarIcon />,
+      title: 'Rate Us',
+      component: '',
+      onClick: () => {},
+    },
+    {
+      icon: <PrivacyPolicyIcon />,
+      title: 'Privacy Policy',
+      component: '',
+      onClick: () => {},
+    },
+    {
+      icon: <FaqsIcon />,
+      title: 'FAQs',
+      component: '',
+      onClick: () => {},
+    },
+    {
+      icon: <LogoutIcon />,
+      title: 'Lougout',
+      component: '',
+      onClick: () => {
+        setShowLogoutModal(true);
+      },
+    },
+  ];
+};
 const ListItemComponnet = ({ icon, itemName, action, onClick }) => (
   <li onClick={onClick} className='p-5 cursor-pointer'>
     <div className='flex justify-between items-center'>
