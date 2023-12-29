@@ -138,21 +138,6 @@ const Dashboard = () => {
             .catch((error) => console.log({ error }));
         }
       );
-      // chrome.proxy.settings.clear({}, () => {
-      //   let updateConfig = {
-      //     ...proxyConfigration,
-      //     isChangeProxyServer: false,
-      //     proxied: false,
-      //     proxyServer: '',
-      //   };
-      //   content
-      //     .getStorageModule()
-      //     .setLocalStorageData('proxyConfig', updateConfig)
-      //     .then((res) => {
-      //       setChecked(false);
-      //     })
-      //     .catch((error) => console.log({ error }));
-      // });
     }
   };
 
@@ -206,8 +191,8 @@ const Dashboard = () => {
                   }`}
                 ></div>
                 <div
-                  className={`absolute left-1 top-1 bg-white-100 w-12 h-12 rounded-full transition transform ${
-                    checked ? 'translate-x-full bg-green-100' : ''
+                  className={`absolute left-1 top-1 w-12 h-12 rounded-full transition transform ${
+                    checked ? 'translate-x-full bg-green-100' : 'bg-white-100'
                   } ${loading ? 'translate-x-full' : ''}`}
                 >
                   <svg
@@ -224,7 +209,6 @@ const Dashboard = () => {
                       className={`${
                         !checked ? 'fill-toogle_white' : 'fill-white-100'
                       }  dark:fill-gray-600`}
-                      // fill='#222A2F'
                     />
                   </svg>
                 </div>
@@ -241,7 +225,7 @@ const Dashboard = () => {
         </div>
         <div className='grid-cols-1'>
           <div className='h-full flex flex-col justify-center'>
-            {connectionDetail?.isoCode.length && (
+             (
               <div className='h-18 w-full p-4 bg-white rounded-lg border shadow-md bg-white-100 dark:bg-gray-800 dark:border-gray-700 place-self-center'>
                 <div className='flex items-center space-x-4'>
                   <CountryIcon isoCode={connectionDetail?.isoCode} />
@@ -251,7 +235,7 @@ const Dashboard = () => {
                   />
                 </div>
               </div>
-            )}
+            )
           </div>
         </div>
       </div>
