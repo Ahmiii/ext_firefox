@@ -14,7 +14,7 @@
     "privacy",
     "webRequest",
     "webNavigation",
-    // "webRequestBlocking",
+      // "webRequestBlocking",
     "webRequestAuthProvider",
     "proxy",
     "storage",

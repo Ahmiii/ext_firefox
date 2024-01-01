@@ -19,6 +19,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       });
     return true;
   }
+  if (messageType == 'getConnectionStatus') {
+    content
+      .getConnectionModule()
+      .getConnectionStatus()
+      .then((res) => {
+        sendResponse(res);
+      })
+      .catch((error) => {
+        sendResponse(error);
+      });
+    return true;
+  }
   if (messageType == 'removeConnection') {
     content
       .getConnectionModule()

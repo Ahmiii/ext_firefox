@@ -1,5 +1,7 @@
+import { Storage } from '../Storage';
 export class Authentication {
   private loginUrl: string;
+
   constructor() {
     this.loginUrl = `https://authentication.circuitvpn.com/login?time=${Date.now()}&&device_type=proxy`;
   }
@@ -7,7 +9,7 @@ export class Authentication {
   getUserAuth() {
     return new Promise((resolve, reject) => {
       chrome.storage.local
-        .get(['userDetail'])
+        .get(['userDetail', 'countryList'])
         .then((result) => {
           resolve(result);
         })
@@ -17,12 +19,17 @@ export class Authentication {
     });
   }
 
-  setUserAuth(value) {
+  setUserAuth(value: any) {
+    const storage = new Storage();
     return new Promise((resolve, reject) => {
-      chrome.storage.local
-        .set({ ['userDetail']: value })
-        .then((res) => resolve(res))
-        .catch((error) => reject(error));
+      storage
+        .setLocalStorageData('userDetail', value)
+        .then((res: any) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          reject(error);
+        });
     });
   }
 

@@ -28,14 +28,28 @@ const Dashboard = () => {
         if (proxyConfigration?.proxied == true) {
           chrome.runtime.sendMessage(
             {
-              messageType: 'setConnection',
-              browserType: browserType,
-              proxyServer: proxyConfigration?.proxyServer,
+              messageType: 'getConnectionStatus',
             },
-            () => setChecked(true)
+            (res) => {
+              {
+                if (res) {
+                  setChecked(true);
+                } else {
+                  setChecked(false);
+                }
+              }
+            }
           );
         }
       });
+
+    // chrome.runtime.sendMessage({
+    //   messageType:'getConnectionStatus'
+    // },(res)=>{
+    //   {
+    //     console.log({res})
+    //   }
+    // })
 
     content
       .getStorageModule()
@@ -225,17 +239,15 @@ const Dashboard = () => {
         </div>
         <div className='grid-cols-1'>
           <div className='h-full flex flex-col justify-center'>
-             (
-              <div className='h-18 w-full p-4 bg-white rounded-lg border shadow-md bg-white-100 dark:bg-gray-800 dark:border-gray-700 place-self-center'>
-                <div className='flex items-center space-x-4'>
-                  <CountryIcon isoCode={connectionDetail?.isoCode} />
-                  <CountryCardContent
-                    countryName={connectionDetail?.countryName}
-                    countryDescription='Selected Server'
-                  />
-                </div>
+            <div className='h-18 w-full p-4 bg-white rounded-lg border shadow-md bg-white-100 dark:bg-gray-800 dark:border-gray-700 place-self-center'>
+              <div className='flex items-center space-x-4'>
+                <CountryIcon isoCode={connectionDetail?.isoCode} />
+                <CountryCardContent
+                  countryName={connectionDetail?.countryName}
+                  countryDescription='Selected Server'
+                />
               </div>
-            )
+            </div>
           </div>
         </div>
       </div>

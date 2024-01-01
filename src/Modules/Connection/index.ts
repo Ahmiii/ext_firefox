@@ -9,17 +9,6 @@ export class Connection {
   createConnection(browserType: string, proxyServer: any) {
     return new Promise(async (resolve, reject) => {
       if (browserType == 'firefox') {
-        // function handleProxyRequest() {
-        //   return {
-        //     type: 'http',
-        //     host: proxyServer?.proxy_host,
-        //     port: proxyServer?.proxy_port,
-        //   };
-        // }
-        // this.browser.proxy.onRequest.addListener(handleProxyRequest, {
-        //   urls: ['<all_urls>'],
-        // });
-
         let proxySettings = {
           autoLogin: true,
           proxyType: 'manual',
@@ -34,7 +23,6 @@ export class Connection {
         } else {
           reject(false);
         }
-        // resolve(true);
       } else {
         const pacScript = `function FindProxyForURL(url, host) {
           if (isPlainHostName(host)) {

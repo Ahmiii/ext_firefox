@@ -11,6 +11,7 @@ const Landing = () => {
       .getAuthenticationModule()
       .getUserAuth()
       .then((response: any) => {
+        console.log({response})
         let userAuthResponse = response?.userDetail;
         if (userAuthResponse?.auth_info) {
           axios.get('/proxy/countries').then((response: any) => {

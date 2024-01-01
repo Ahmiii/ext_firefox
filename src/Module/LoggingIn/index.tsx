@@ -6,18 +6,6 @@ const content = new Content();
 const Login = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    content
-      .getAuthenticationModule()
-      .getUserAuth()
-      .then((response: any) => {
-        let userAuthResponse = response?.userDetail;
-        if (userAuthResponse?.auth_info) {
-          navigate('/dashboard');
-        }
-      });
-  }, []);
-
   const onLoginHandler = () => {
     chrome.runtime.sendMessage('LogIn', (tabId) => {
       content
